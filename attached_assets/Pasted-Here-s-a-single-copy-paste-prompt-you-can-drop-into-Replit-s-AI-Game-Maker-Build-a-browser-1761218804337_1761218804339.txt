@@ -1,0 +1,318 @@
+Here’s a single, copy-paste prompt you can drop into Replit’s AI Game Maker:
+
+---
+
+# Build a browser game: **EU Tax Tactician**
+
+## Goal
+
+Create a fast, replayable, **educational** web game that helps players learn practical differences in **EU business taxation and incentives** (legally, not evasion). The game should make players better at recognizing which EU country best fits a specific startup scenario.
+
+## Tech & Scope
+
+* Single-page web app (HTML + CSS + Vanilla JS). No backend.
+* Mobile-first responsive layout. Works great on desktop too.
+* Zero external build tools. All assets local.
+* Ship a **self-contained** project with `index.html`, `styles.css`, `game.js`, and a `data/` folder for editable JSON.
+
+## Core Loop / Mechanic
+
+1. **Draw a Scenario Card**: Show a startup idea (industry, size, revenue model, hiring plan, IP, cross-border activity, etc.).
+2. **Pick a Country**: Player chooses one EU country from a dropdown or tap a map grid (no actual map library needed—simple grid buttons with flags).
+3. **Immediate Feedback**: Show:
+
+   * “Best choice” vs the player’s pick
+   * Why the best choice wins for this scenario (1–3 bullet reasons)
+   * A short explainer of **relevant legal concepts** (e.g., R&D tax credits, participation exemptions, IP boxes, VAT OSS, withholding on dividends/royalties, loss carryforwards).
+4. **Score + Progression**:
+
+   * +100 for correct, +40–90 if close (second-best), 0 otherwise.
+   * Speed bonus (timer).
+   * **Streak meter** and **rank** (e.g., “Associate → Analyst → Senior → Partner”).
+5. **Unlockables (Abilities)**: Grant perks based on performance:
+
+   * **Advisor Hint** (reveal top 2 candidates)
+   * **Treaty Tracker** (extra clue on cross-border payments)
+   * **R&D Boost** (highlight countries with strong innovation incentives for tech/biotech scenarios)
+   * **SME Saver** (highlight regimes friendlier to small, early-profit firms)
+6. **Repeat** for N cards. End with final score, breakdown, and “Play Again”.
+
+## Learning Alignment
+
+* Each card teaches **one or two concrete tax concepts** through the rationale.
+* Keep numbers qualitative (e.g., “low corporate tax”, “generous R&D credit”)—no need for exact statutory rates.
+* Show glossary tooltips for every technical term.
+
+## Game Objective
+
+* Finish a “deck” (e.g., 12 scenarios) with the highest score.
+* Encourage replays via **randomized decks** and ability unlock pacing.
+
+## Feedback System
+
+* **Immediate**: After each pick, show:
+
+  * Best country (with flag)
+  * 2–4 bullet reasons
+  * Short “What you missed” note tied to the scenario’s constraints
+* **Cumulative**:
+
+  * End screen with strengths/weaknesses (e.g., “You ace R&D/Innovation incentives. Review VAT distance selling & OSS.”)
+  * Show which abilities were unlocked and when.
+
+## Win Conditions
+
+* Clear the deck. Show total score, accuracy %, avg time, longest streak, abilities unlocked. Offer Restart.
+
+## UI/UX Requirements
+
+* Clean, minimal aesthetic (system fonts), big tap targets.
+* Three primary views: **Start → Play → Results**.
+* Top bar in Play view: Score, Streak, Timer, Ability Buttons (disabled/enabled states).
+* Card area: scenario on left (or top on mobile), country grid/dropdown on right (or bottom on mobile).
+* Accessibility: keyboard navigable; visible focus rings; ARIA labels.
+
+## Data Architecture (JSON in `/data`)
+
+Create two editable JSON files the game loads:
+
+1. `data/country_traits.json`
+
+```json
+{
+  "countries": [
+    {
+      "code": "IE",
+      "name": "Ireland",
+      "traits": ["low_cit_for_smes", "strong_ip_regime", "english_language", "hub_for_saas", "good_treaty_network"]
+    },
+    {
+      "code": "EE",
+      "name": "Estonia",
+      "traits": ["tax_deferral_retained_profits", "digital_admin_ease", "startup_friendly", "fast_incorporation"]
+    },
+    {
+      "code": "NL",
+      "name": "Netherlands",
+      "traits": ["innovation_box_like", "holding_company_friendly", "treaty_network", "logistics_hub"]
+    },
+    {
+      "code": "LU",
+      "name": "Luxembourg",
+      "traits": ["holding_company_friendly", "finance_friendly", "treaty_network"]
+    },
+    {
+      "code": "CY",
+      "name": "Cyprus",
+      "traits": ["ip_box_like", "english_language", "sme_friendly"]
+    },
+    {
+      "code": "MT",
+      "name": "Malta",
+      "traits": ["imputation_system_like", "ip_friendly", "sme_friendly"]
+    },
+    {
+      "code": "DE",
+      "name": "Germany",
+      "traits": ["loss_carryforward_depth", "manufacturing_ecosystem", "large_market", "r_and_d_incentives"]
+    },
+    {
+      "code": "FR",
+      "name": "France",
+      "traits": ["strong_r_and_d_credit", "deep_talent_pool", "startup_visas"]
+    },
+    {
+      "code": "ES",
+      "name": "Spain",
+      "traits": ["startup_law_like", "remote_worker_friendly", "r_and_d_incentives"]
+    },
+    {
+      "code": "PT",
+      "name": "Portugal",
+      "traits": ["startup_friendly", "tech_ecosystem_growing", "sme_friendly"]
+    },
+    {
+      "code": "LT",
+      "name": "Lithuania",
+      "traits": ["fintech_friendly", "fast_incorporation", "startup_ecosystem"]
+    },
+    {
+      "code": "SE",
+      "name": "Sweden",
+      "traits": ["no_withholding_dividends_intra_eu_like", "strong_ip_protection", "deep_tech_talent"]
+    },
+    {
+      "code": "DK",
+      "name": "Denmark",
+      "traits": ["robust_r_and_d_deduction", "design_hardware_ecosystem", "sme_support_programs"]
+    }
+  ],
+  "traitGlossary": {
+    "low_cit_for_smes": "Comparatively lower effective corporate income tax for smaller, domestic-focused companies (illustrative).",
+    "tax_deferral_retained_profits": "Tax generally due upon distribution, helping reinvestment (illustrative).",
+    "innovation_box_like": "Preferential regime for certain IP/innovation income (illustrative).",
+    "imputation_system_like": "Shareholder-level relief mechanisms that may reduce double taxation (illustrative).",
+    "r_and_d_incentives": "Credits or super-deductions to encourage research and development.",
+    "ip_box_like": "Preferential treatment for qualifying IP income.",
+    "treaty_network": "Broad tax treaty coverage can reduce withholding and double taxation.",
+    "startup_friendly": "Incorporation, visas, grants, or simplified regimes attractive to startups.",
+    "sme_friendly": "Administrative and tax features that can benefit smaller companies.",
+    "remote_worker_friendly": "Frameworks or policies that may be favorable to distributed teams.",
+    "no_withholding_dividends_intra_eu_like": "Mechanisms that may reduce intra-EU dividend withholding in group structures (subject to rules)."
+  }
+}
+```
+
+2. `data/scenarios.json`
+
+```json
+{
+  "deckSize": 12,
+  "scenarios": [
+    {
+      "id": "SaaS_Freemium_IP",
+      "title": "Freemium SaaS with heavy IP",
+      "description": "Small team, global customers, significant spend on patents and code. Monetization via subscriptions.",
+      "needs": ["strong_ip_regime", "hub_for_saas", "treaty_network", "r_and_d_incentives"],
+      "best": ["IE","NL","SE"],
+      "explain": "SaaS with meaningful IP and cross-border subs benefits from strong IP protection and broad treaty networks. Innovation-supporting regimes help reduce effective tax on qualifying income."
+    },
+    {
+      "id": "Hardware_RnD_Prototype",
+      "title": "Hardware prototyping & design",
+      "description": "Building physical prototypes, frequent R&D iterations, moderate EU sales.",
+      "needs": ["robust_r_and_d_deduction","design_hardware_ecosystem","manufacturing_ecosystem"],
+      "best": ["DK","DE","SE"],
+      "explain": "Strong R&D incentives and access to hardware/design ecosystems support rapid iteration; manufacturing depth eases scale-up."
+    },
+    {
+      "id": "Fintech_Compliance",
+      "title": "Fintech with strong compliance",
+      "description": "Payment services, early traction, needs friendly regulator and fast incorporation.",
+      "needs": ["fintech_friendly","fast_incorporation","treaty_network"],
+      "best": ["LT","IE","NL"],
+      "explain": "Fintech-friendly environments with efficient incorporation and solid treaty networks help reduce friction on cross-border flows."
+    },
+    {
+      "id": "Gaming_Studio",
+      "title": "Indie gaming studio",
+      "description": "Digital downloads, IP creation, variable revenue, small distributed team.",
+      "needs": ["ip_box_like","startup_friendly","remote_worker_friendly"],
+      "best": ["PT","ES","CY"],
+      "explain": "Startup-friendly setups and IP-oriented regimes can improve overall efficiency for digital studios."
+    },
+    {
+      "id": "Marketplace_Logistics",
+      "title": "EU marketplace with logistics",
+      "description": "Multi-country sellers, warehousing, VAT OSS considerations.",
+      "needs": ["logistics_hub","treaty_network","startup_friendly"],
+      "best": ["NL","DE","IE"],
+      "explain": "Logistics hubs and strong treaty networks help with cross-border complexity; OSS awareness is key."
+    },
+    {
+      "id": "Biotech_RnD",
+      "title": "Biotech with labs",
+      "description": "Heavy R&D, grants, long runway before revenue.",
+      "needs": ["strong_r_and_d_credit","deep_talent_pool","startup_visas"],
+      "best": ["FR","DE","IE"],
+      "explain": "Generous R&D incentives and deep talent pools are pivotal for long pre-revenue cycles."
+    },
+    {
+      "id": "Creator_Tools_SME",
+      "title": "Creator economy tools (SME)",
+      "description": "Small team, steady profits, subscription revenue.",
+      "needs": ["low_cit_for_smes","sme_friendly","english_language"],
+      "best": ["IE","CY","MT"],
+      "explain": "SME-oriented regimes and English-language operations reduce friction for small profitable SaaS."
+    },
+    {
+      "id": "Holding_IP",
+      "title": "IP holding & licensing",
+      "description": "Group needs to hold IP and license to subsidiaries.",
+      "needs": ["holding_company_friendly","ip_box_like","treaty_network"],
+      "best": ["NL","LU","CY"],
+      "explain": "Holding-friendly jurisdictions with IP incentives and broad treaty networks often optimize group licensing flows."
+    },
+    {
+      "id": "Ecom_CrossBorder",
+      "title": "Cross-border e-commerce",
+      "description": "Warehousing in EU, OSS/IOSS questions, returns complexity.",
+      "needs": ["logistics_hub","startup_friendly","treaty_network"],
+      "best": ["NL","DE","ES"],
+      "explain": "Logistics and OSS awareness matter to keep compliance manageable at scale."
+    },
+    {
+      "id": "DeepTech_AI",
+      "title": "DeepTech AI startup",
+      "description": "High research spend, academic partnerships, export licensing considerations.",
+      "needs": ["r_and_d_incentives","deep_tech_talent","startup_friendly"],
+      "best": ["FR","DE","SE"],
+      "explain": "Deep talent pools and R&D support reduce cost of innovation."
+    },
+    {
+      "id": "Remote_Team_SME",
+      "title": "Fully remote SME",
+      "description": "Distributed team across EU, modest profits, contractors.",
+      "needs": ["remote_worker_friendly","sme_friendly","startup_friendly"],
+      "best": ["PT","ES","IE"],
+      "explain": "Friendly admin for remote setups helps SMEs stay compliant."
+    },
+    {
+      "id": "Media_Subscriptions",
+      "title": "Media subscriptions",
+      "description": "Content IP, recurring subscriptions, cross-border royalties.",
+      "needs": ["ip_box_like","treaty_network","strong_ip_regime"],
+      "best": ["IE","NL","CY"],
+      "explain": "IP-favoring regimes and treaty breadth help with royalties and licensing."
+    }
+  ]
+}
+```
+
+## Scoring & Similarity
+
+* Compute a **similarity score**: `match = overlap(needs, country.traits)`.
+* Correct answer = highest match set (`best` in scenario). Second-best = within 1 match of top.
+* Award points as defined above. Show rationale from `scenario.explain` plus a country-specific blurb based on the matched traits.
+
+## Abilities (Unlocks)
+
+* Unlock thresholds: Advisor Hint at 3-streak, Treaty Tracker at 6-streak, R&D Boost at 9-streak, SME Saver at 12-streak.
+* Each ability is a one-click UI button; show tooltip descriptions.
+
+## Glossary & Tooltips
+
+* Hover or tap terms to open a short, plain-language definition from `traitGlossary`.
+
+## Results Screen
+
+* Show total score, accuracy %, avg time/turn, longest streak.
+* Heatmap list of concepts mastered vs to review.
+* CTA: “Play Again” + “Edit Data” (links to open JSON files in a modal viewer).
+
+## Visuals
+
+* Minimal cards UI, emoji flags, soft shadows, rounded corners.
+* Progress bar for deck completion.
+
+## Disclaimers (visible)
+
+* Banner on Start and in footer:
+
+  > **Educational only.** This game simplifies complex rules. Not legal or tax advice. Laws change—consult a qualified advisor.
+
+## Non-Goals
+
+* No real tax rate tables, no evasion content.
+* Keep trait names **illustrative**, not definitive claims.
+
+## Implementation Checklist
+
+* [ ] Load JSON files and seed deck randomly.
+* [ ] Timer, score, streak, and ability state.
+* [ ] Immediate feedback panel with reasons and glossary links.
+* [ ] Results analytics and replay.
+* [ ] Keyboard navigation & focus states.
+* [ ] All strings centralized for easy editing.
+
+**Build this now.**
