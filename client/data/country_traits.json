@@ -1,0 +1,107 @@
+{
+  "countries": [
+    {
+      "code": "IE",
+      "name": "Ireland",
+      "traits": ["low_cit_for_smes", "strong_ip_regime", "english_language", "hub_for_saas", "good_treaty_network"]
+    },
+    {
+      "code": "EE",
+      "name": "Estonia",
+      "traits": ["tax_deferral_retained_profits", "digital_admin_ease", "startup_friendly", "fast_incorporation"]
+    },
+    {
+      "code": "NL",
+      "name": "Netherlands",
+      "traits": ["innovation_box_like", "holding_company_friendly", "treaty_network", "logistics_hub"]
+    },
+    {
+      "code": "LU",
+      "name": "Luxembourg",
+      "traits": ["holding_company_friendly", "finance_friendly", "treaty_network"]
+    },
+    {
+      "code": "CY",
+      "name": "Cyprus",
+      "traits": ["ip_box_like", "english_language", "sme_friendly"]
+    },
+    {
+      "code": "MT",
+      "name": "Malta",
+      "traits": ["imputation_system_like", "ip_friendly", "sme_friendly"]
+    },
+    {
+      "code": "DE",
+      "name": "Germany",
+      "traits": ["loss_carryforward_depth", "manufacturing_ecosystem", "large_market", "r_and_d_incentives"]
+    },
+    {
+      "code": "FR",
+      "name": "France",
+      "traits": ["strong_r_and_d_credit", "deep_talent_pool", "startup_visas"]
+    },
+    {
+      "code": "ES",
+      "name": "Spain",
+      "traits": ["startup_law_like", "remote_worker_friendly", "r_and_d_incentives"]
+    },
+    {
+      "code": "PT",
+      "name": "Portugal",
+      "traits": ["startup_friendly", "tech_ecosystem_growing", "sme_friendly"]
+    },
+    {
+      "code": "LT",
+      "name": "Lithuania",
+      "traits": ["fintech_friendly", "fast_incorporation", "startup_ecosystem"]
+    },
+    {
+      "code": "SE",
+      "name": "Sweden",
+      "traits": ["no_withholding_dividends_intra_eu_like", "strong_ip_protection", "deep_tech_talent"]
+    },
+    {
+      "code": "DK",
+      "name": "Denmark",
+      "traits": ["robust_r_and_d_deduction", "design_hardware_ecosystem", "sme_support_programs"]
+    }
+  ],
+  "traitGlossary": {
+    "low_cit_for_smes": "Comparatively lower effective corporate income tax for smaller, domestic-focused companies (illustrative).",
+    "tax_deferral_retained_profits": "Tax generally due upon distribution, helping reinvestment (illustrative).",
+    "innovation_box_like": "Preferential regime for certain IP/innovation income (illustrative).",
+    "imputation_system_like": "Shareholder-level relief mechanisms that may reduce double taxation (illustrative).",
+    "r_and_d_incentives": "Credits or super-deductions to encourage research and development.",
+    "ip_box_like": "Preferential treatment for qualifying IP income.",
+    "treaty_network": "Broad tax treaty coverage can reduce withholding and double taxation.",
+    "startup_friendly": "Incorporation, visas, grants, or simplified regimes attractive to startups.",
+    "sme_friendly": "Administrative and tax features that can benefit smaller companies.",
+    "remote_worker_friendly": "Frameworks or policies that may be favorable to distributed teams.",
+    "no_withholding_dividends_intra_eu_like": "Mechanisms that may reduce intra-EU dividend withholding in group structures (subject to rules).",
+    "strong_ip_regime": "Robust intellectual property protection and enforcement frameworks.",
+    "english_language": "English as widely spoken business language, reducing operational friction.",
+    "hub_for_saas": "Established ecosystems and infrastructure supporting software-as-a-service businesses.",
+    "good_treaty_network": "Comprehensive network of tax treaties facilitating cross-border business.",
+    "digital_admin_ease": "Streamlined digital processes for business administration and compliance.",
+    "fast_incorporation": "Rapid and efficient business incorporation procedures.",
+    "holding_company_friendly": "Favorable regimes for holding company structures and group financing.",
+    "logistics_hub": "Strategic location and infrastructure for European distribution and logistics.",
+    "finance_friendly": "Regulatory and tax environment supportive of financial services.",
+    "ip_friendly": "General intellectual property advantages and supportive ecosystem.",
+    "loss_carryforward_depth": "Generous provisions for carrying forward business losses.",
+    "manufacturing_ecosystem": "Strong industrial base and manufacturing support infrastructure.",
+    "large_market": "Significant domestic market providing scale opportunities.",
+    "strong_r_and_d_credit": "Substantial research and development tax credits and incentives.",
+    "deep_talent_pool": "Access to skilled workforce and specialized expertise.",
+    "startup_visas": "Immigration pathways designed to attract international entrepreneurs.",
+    "startup_law_like": "Legislative frameworks specifically designed to support startup growth.",
+    "tech_ecosystem_growing": "Emerging and expanding technology sector with government support.",
+    "fintech_friendly": "Regulatory sandbox and supportive environment for financial technology.",
+    "startup_ecosystem": "Established network of startups, investors, and support organizations.",
+    "strong_ip_protection": "Robust legal framework for intellectual property rights enforcement.",
+    "deep_tech_talent": "Access to highly specialized technical and engineering expertise.",
+    "robust_r_and_d_deduction": "Comprehensive tax deductions for research and development expenditure.",
+    "design_hardware_ecosystem": "Industrial design and hardware development capabilities.",
+    "sme_support_programs": "Government programs and incentives specifically targeting small and medium enterprises."
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "deckSize": 12,
+  "scenarios": [
+    {
+      "id": "SaaS_Freemium_IP",
+      "title": "Freemium SaaS with heavy IP",
+      "description": "Small team, global customers, significant spend on patents and code. Monetization via subscriptions.",
+      "needs": ["strong_ip_regime", "hub_for_saas", "treaty_network", "r_and_d_incentives"],
+      "best": ["IE","NL","SE"],
+      "explain": "SaaS with meaningful IP and cross-border subs benefits from strong IP protection and broad treaty networks. Innovation-supporting regimes help reduce effective tax on qualifying income."
+    },
+    {
+      "id": "Hardware_RnD_Prototype",
+      "title": "Hardware prototyping & design",
+      "description": "Building physical prototypes, frequent R&D iterations, moderate EU sales.",
+      "needs": ["robust_r_and_d_deduction","design_hardware_ecosystem","manufacturing_ecosystem"],
+      "best": ["DK","DE","SE"],
+      "explain": "Strong R&D incentives and access to hardware/design ecosystems support rapid iteration; manufacturing depth eases scale-up."
+    },
+    {
+      "id": "Fintech_Compliance",
+      "title": "Fintech with strong compliance",
+      "description": "Payment services, early traction, needs friendly regulator and fast incorporation.",
+      "needs": ["fintech_friendly","fast_incorporation","treaty_network"],
+      "best": ["LT","IE","NL"],
+      "explain": "Fintech-friendly environments with efficient incorporation and solid treaty networks help reduce friction on cross-border flows."
+    },
+    {
+      "id": "Gaming_Studio",
+      "title": "Indie gaming studio",
+      "description": "Digital downloads, IP creation, variable revenue, small distributed team.",
+      "needs": ["ip_box_like","startup_friendly","remote_worker_friendly"],
+      "best": ["PT","ES","CY"],
+      "explain": "Startup-friendly setups and IP-oriented regimes can improve overall efficiency for digital studios."
+    },
+    {
+      "id": "Marketplace_Logistics",
+      "title": "EU marketplace with logistics",
+      "description": "Multi-country sellers, warehousing, VAT OSS considerations.",
+      "needs": ["logistics_hub","treaty_network","startup_friendly"],
+      "best": ["NL","DE","IE"],
+      "explain": "Logistics hubs and strong treaty networks help with cross-border complexity; OSS awareness is key."
+    },
+    {
+      "id": "Biotech_RnD",
+      "title": "Biotech with labs",
+      "description": "Heavy R&D, grants, long runway before revenue.",
+      "needs": ["strong_r_and_d_credit","deep_talent_pool","startup_visas"],
+      "best": ["FR","DE","IE"],
+      "explain": "Generous R&D incentives and deep talent pools are pivotal for long pre-revenue cycles."
+    },
+    {
+      "id": "Creator_Tools_SME",
+      "title": "Creator economy tools (SME)",
+      "description": "Small team, steady profits, subscription revenue.",
+      "needs": ["low_cit_for_smes","sme_friendly","english_language"],
+      "best": ["IE","CY","MT"],
+      "explain": "SME-oriented regimes and English-language operations reduce friction for small profitable SaaS."
+    },
+    {
+      "id": "Holding_IP",
+      "title": "IP holding & licensing",
+      "description": "Group needs to hold IP and license to subsidiaries.",
+      "needs": ["holding_company_friendly","ip_box_like","treaty_network"],
+      "best": ["NL","LU","CY"],
+      "explain": "Holding-friendly jurisdictions with IP incentives and broad treaty networks often optimize group licensing flows."
+    },
+    {
+      "id": "Ecom_CrossBorder",
+      "title": "Cross-border e-commerce",
+      "description": "Warehousing in EU, OSS/IOSS questions, returns complexity.",
+      "needs": ["logistics_hub","startup_friendly","treaty_network"],
+      "best": ["NL","DE","ES"],
+      "explain": "Logistics and OSS awareness matter to keep compliance manageable at scale."
+    },
+    {
+      "id": "DeepTech_AI",
+      "title": "DeepTech AI startup",
+      "description": "High research spend, academic partnerships, export licensing considerations.",
+      "needs": ["r_and_d_incentives","deep_tech_talent","startup_friendly"],
+      "best": ["FR","DE","SE"],
+      "explain": "Deep talent pools and R&D support reduce cost of innovation."
+    },
+    {
+      "id": "Remote_Team_SME",
+      "title": "Fully remote SME",
+      "description": "Distributed team across EU, modest profits, contractors.",
+      "needs": ["remote_worker_friendly","sme_friendly","startup_friendly"],
+      "best": ["PT","ES","IE"],
+      "explain": "Friendly admin for remote setups helps SMEs stay compliant."
+    },
+    {
+      "id": "Media_Subscriptions",
+      "title": "Media subscriptions",
+      "description": "Content IP, recurring subscriptions, cross-border royalties.",
+      "needs": ["ip_box_like","treaty_network","strong_ip_regime"],
+      "best": ["IE","NL","CY"],
+      "explain": "IP-favoring regimes and treaty breadth help with royalties and licensing."
+    },
+    {
+      "id": "Manufacturing_Export",
+      "title": "Manufacturing for EU export",
+      "description": "Physical products, supply chain complexity, cross-border VAT.",
+      "needs": ["manufacturing_ecosystem","logistics_hub","treaty_network"],
+      "best": ["DE","NL","FR"],
+      "explain": "Manufacturing expertise, logistics infrastructure, and treaty networks support complex supply chains."
+    },
+    {
+      "id": "Consulting_Services",
+      "title": "Professional services consulting",
+      "description": "High-value consulting, cross-border clients, personal service delivery.",
+      "needs": ["treaty_network","sme_friendly","english_language"],
+      "best": ["IE","NL","LU"],
+      "explain": "Strong treaty networks and professional service frameworks facilitate cross-border consulting."
+    },
+    {
+      "id": "Fashion_Brand",
+      "title": "Fashion e-commerce brand",
+      "description": "Design-focused brand, EU-wide sales, seasonal inventory.",
+      "needs": ["design_hardware_ecosystem","logistics_hub","sme_friendly"],
+      "best": ["DK","NL","DE"],
+      "explain": "Design ecosystems and logistics infrastructure support fashion brands with complex supply chains."
+    }
+  ]
+}

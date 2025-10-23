@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EU Tax Tactician</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Disclaimer Banner -->
+    <div class="disclaimer-banner">
+        <strong>Educational only.</strong> This game simplifies complex rules. Not legal or tax advice. Laws change—consult a qualified advisor.
+    </div>
+
+    <!-- Main Game Container -->
+    <div id="app">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <div class="container">
+                <div class="hero-section">
+                    <h1>🇪🇺 EU Tax Tactician</h1>
+                    <p>Master EU business taxation through interactive scenarios</p>
+                    <button id="start-game-btn" class="btn btn-primary btn-large">Start Game</button>
+                </div>
+                
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Learn by Doing</h3>
+                        <p>Practice with real business scenarios</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🏆</div>
+                        <h3>Track Progress</h3>
+                        <p>Unlock abilities and climb the ranks</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📚</div>
+                        <h3>Interactive Glossary</h3>
+                        <p>Learn tax concepts as you play</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Play Screen -->
+        <div id="play-screen" class="screen">
+            <div class="game-header">
+                <div class="game-stats">
+                    <div class="stat">
+                        <span class="stat-label">Score</span>
+                        <span id="current-score" class="stat-value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Streak</span>
+                        <span id="current-streak" class="stat-value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Time</span>
+                        <span id="current-timer" class="stat-value">0s</span>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <span id="progress-text" class="progress-text">1 / 12</span>
+                </div>
+
+                <div class="abilities">
+                    <button id="advisor-hint-btn" class="ability-btn" disabled title="Advisor Hint (Unlock at 3-streak)">💡</button>
+                    <button id="treaty-tracker-btn" class="ability-btn" disabled title="Treaty Tracker (Unlock at 6-streak)">🤝</button>
+                    <button id="rd-boost-btn" class="ability-btn" disabled title="R&D Boost (Unlock at 9-streak)">🔬</button>
+                    <button id="sme-saver-btn" class="ability-btn" disabled title="SME Saver (Unlock at 12-streak)">🏢</button>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="scenario-card">
+                    <h2 id="scenario-title">Loading...</h2>
+                    <p id="scenario-description">Please wait while we load the scenario...</p>
+                    <div id="scenario-hints" class="scenario-hints"></div>
+                </div>
+
+                <div class="country-selection">
+                    <h3>Choose the best EU country:</h3>
+                    <div id="country-grid" class="country-grid">
+                        <!-- Countries will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Modal -->
+            <div id="feedback-modal" class="modal">
+                <div class="modal-content">
+                    <div id="feedback-result" class="feedback-result">
+                        <div id="result-icon" class="result-icon"></div>
+                        <h3 id="result-title"></h3>
+                        <div id="result-points" class="result-points"></div>
+                    </div>
+                    
+                    <div class="feedback-details">
+                        <div class="best-choice">
+                            <h4>Best Choice(s):</h4>
+                            <div id="best-countries" class="best-countries"></div>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h4>Why:</h4>
+                            <p id="explanation-text"></p>
+                        </div>
+                        
+                        <div id="missed-info" class="missed-info"></div>
+                    </div>
+                    
+                    <button id="next-scenario-btn" class="btn btn-primary">Next Scenario</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <div class="container">
+                <div class="results-hero">
+                    <h1>🎉 Game Complete!</h1>
+                    <div id="final-rank" class="final-rank">Associate</div>
+                </div>
+                
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Total Score</h3>
+                        <div id="final-score" class="result-value">0</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Accuracy</h3>
+                        <div id="final-accuracy" class="result-value">0%</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Average Time</h3>
+                        <div id="final-avg-time" class="result-value">0s</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Longest Streak</h3>
+                        <div id="final-streak" class="result-value">0</div>
+                    </div>
+                </div>
+                
+                <div class="abilities-unlocked">
+                    <h3>Abilities Unlocked</h3>
+                    <div id="unlocked-abilities" class="unlocked-list"></div>
+                </div>
+                
+                <div class="concept-mastery">
+                    <h3>Concept Mastery</h3>
+                    <div id="mastery-heatmap" class="mastery-heatmap"></div>
+                </div>
+                
+                <div class="actions">
+                    <button id="play-again-btn" class="btn btn-primary btn-large">Play Again</button>
+                    <button id="edit-data-btn" class="btn btn-secondary">Edit Data</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Editor Modal -->
+        <div id="data-editor-modal" class="modal">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h3>Edit Game Data</h3>
+                    <button id="close-editor-btn" class="close-btn">&times;</button>
+                </div>
+                
+                <div class="data-tabs">
+                    <button class="tab-btn active" data-tab="countries">Countries</button>
+                    <button class="tab-btn" data-tab="scenarios">Scenarios</button>
+                </div>
+                
+                <div class="tab-content">
+                    <div id="countries-tab" class="tab-panel active">
+                        <textarea id="countries-editor" class="data-editor"></textarea>
+                    </div>
+                    <div id="scenarios-tab" class="tab-panel">
+                        <textarea id="scenarios-editor" class="data-editor"></textarea>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button id="save-data-btn" class="btn btn-primary">Save Changes</button>
+                    <button id="reset-data-btn" class="btn btn-secondary">Reset to Default</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glossary Tooltip -->
+    <div id="glossary-tooltip" class="glossary-tooltip"></div>
+
+    <script src="/game.js"></script>
+</body>
+</html>
