@@ -13,6 +13,12 @@ let gameState = {
   scenarios: [],
   countries: [],
   traitGlossary: {},
+  difficulty: 'easy',
+  difficultySettings: {
+    easy: { deckSize: 6, timePressure: false, timeLimit: null },
+    normal: { deckSize: 12, timePressure: false, timeLimit: null },
+    hard: { deckSize: 18, timePressure: true, timeLimit: 30 }
+  },
   unlockedAbilities: {
     advisorHint: false,
     treatyTracker: false,
@@ -26,7 +32,9 @@ let gameState = {
     smeSaver: false
   },
   conceptMastery: {},
-  scenarioResults: []
+  scenarioResults: [],
+  achievements: [],
+  allTimeStats: null
 };
 
 let timerInterval = null;
@@ -38,6 +46,68 @@ const countryFlags = {
   'MT': '🇲🇹', 'DE': '🇩🇪', 'FR': '🇫🇷', 'ES': '🇪🇸', 'PT': '🇵🇹',
   'LT': '🇱🇹', 'SE': '🇸🇪', 'DK': '🇩🇰'
 };
+
+// Achievement Definitions
+const ACHIEVEMENTS = [
+  {
+    id: 'first_win',
+    name: 'First Victory',
+    icon: '🎯',
+    description: 'Complete your first game',
+    check: (stats) => stats.gamesPlayed >= 1
+  },
+  {
+    id: 'perfect_game',
+    name: 'Perfect Score',
+    icon: '💯',
+    description: 'Get 100% accuracy in a game',
+    check: (stats, game) => game && game.accuracy === 100
+  },
+  {
+    id: 'speed_demon',
+    name: 'Speed Demon',
+    icon: '⚡',
+    description: 'Complete a game with avg time < 10s per scenario',
+    check: (stats, game) => game && game.avgTime < 10
+  },
+  {
+    id: 'streak_master',
+    name: 'Streak Master',
+    icon: '🔥',
+    description: 'Achieve a 10+ streak',
+    check: (stats) => stats.bestStreak >= 10
+  },
+  {
+    id: 'expert_complete',
+    name: 'Expert Tactician',
+    icon: '🏆',
+    description: 'Complete Expert difficulty',
+    check: (stats) => stats.difficultyCompletions.hard >= 1
+  },
+  {
+    id: 'completionist',
+    name: 'Completionist',
+    icon: '🌟',
+    description: 'Complete all three difficulty levels',
+    check: (stats) => stats.difficultyCompletions.easy >= 1 && 
+                       stats.difficultyCompletions.normal >= 1 && 
+                       stats.difficultyCompletions.hard >= 1
+  },
+  {
+    id: 'veteran',
+    name: 'Veteran',
+    icon: '🎖️',
+    description: 'Play 10 games',
+    check: (stats) => stats.gamesPlayed >= 10
+  },
+  {
+    id: 'master',
+    name: 'Tax Master',
+    icon: '👑',
+    description: 'Play 25 games',
+    check: (stats) => stats.gamesPlayed >= 25
+  }
+];
 
 // Initialize game on page load
 document.addEventListener('DOMContentLoaded', async () => {
@@ -59,7 +129,23 @@ async function loadGameData() {
     
     gameState.countries = countriesData.countries;
     gameState.traitGlossary = countriesData.traitGlossary;
-    gameState.scenarios = shuffleArray([...scenariosData.scenarios]).slice(0, scenariosData.deckSize);
+    gameState.allScenarios = scenariosData.scenarios;
+    
+    // Load all-time stats from localStorage
+    const storedStats = localStorage.getItem('euTaxTacticianStats');
+    if (storedStats) {
+      gameState.allTimeStats = JSON.parse(storedStats);
+    } else {
+      gameState.allTimeStats = {
+        gamesPlayed: 0,
+        totalScore: 0,
+        totalTime: 0,
+        perfectGames: 0,
+        achievements: [],
+        bestStreak: 0,
+        difficultyCompletions: { easy: 0, normal: 0, hard: 0 }
+      };
+    }
     
     console.log('Game data loaded successfully');
   } catch (error) {
@@ -72,6 +158,15 @@ async function loadGameData() {
 function setupEventListeners() {
   // Start screen
   document.getElementById('start-game-btn').addEventListener('click', startGame);
+  
+  // Difficulty selection
+  document.querySelectorAll('.difficulty-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      gameState.difficulty = e.currentTarget.dataset.difficulty;
+    });
+  });
   
   // Play screen abilities
   document.getElementById('advisor-hint-btn').addEventListener('click', () => useAbility('advisorHint'));
@@ -169,6 +264,12 @@ function closeModal(modalId) {
 
 // Game logic
 function startGame() {
+  // Get difficulty settings
+  const settings = gameState.difficultySettings[gameState.difficulty];
+  
+  // Select scenarios based on difficulty
+  gameState.scenarios = shuffleArray([...gameState.allScenarios]).slice(0, settings.deckSize);
+  
   // Reset game state
   gameState.currentScenario = 0;
   gameState.score = 0;
@@ -179,6 +280,7 @@ function startGame() {
   gameState.totalTime = 0;
   gameState.scenarioResults = [];
   gameState.conceptMastery = {};
+  gameState.achievements = [];
   
   // Reset abilities
   Object.keys(gameState.unlockedAbilities).forEach(key => {
@@ -199,10 +301,72 @@ function startTimer() {
     clearInterval(timerInterval);
   }
   
+  const settings = gameState.difficultySettings[gameState.difficulty];
+  
   timerInterval = setInterval(() => {
     gameState.timer = Math.floor((Date.now() - gameState.scenarioStartTime) / 1000);
-    document.getElementById('current-timer').textContent = `${gameState.timer}s`;
+    const timerEl = document.getElementById('current-timer');
+    
+    if (settings.timePressure && settings.timeLimit) {
+      const remaining = settings.timeLimit - gameState.timer;
+      if (remaining <= 0) {
+        // Auto-select wrong answer on timeout
+        timerEl.textContent = '0s';
+        timerEl.style.color = 'var(--error)';
+        handleTimeout();
+      } else {
+        timerEl.textContent = `${remaining}s`;
+        if (remaining <= 10) {
+          timerEl.style.color = 'var(--error)';
+        } else if (remaining <= 20) {
+          timerEl.style.color = 'var(--warning)';
+        } else {
+          timerEl.style.color = 'var(--text-primary)';
+        }
+      }
+    } else {
+      timerEl.textContent = `${gameState.timer}s`;
+      timerEl.style.color = 'var(--text-primary)';
+    }
   }, 1000);
+}
+
+function handleTimeout() {
+  stopTimer();
+  
+  const scenario = gameState.scenarios[gameState.currentScenario];
+  const scenarioTime = gameState.difficultySettings[gameState.difficulty].timeLimit;
+  
+  // Timeout counts as incorrect
+  gameState.streak = 0;
+  gameState.totalTime += scenarioTime;
+  
+  // Track concept mastery (all failed on timeout)
+  scenario.needs.forEach(need => {
+    if (!gameState.conceptMastery[need]) {
+      gameState.conceptMastery[need] = { correct: 0, total: 0 };
+    }
+    gameState.conceptMastery[need].total++;
+  });
+  
+  // Store timeout result
+  gameState.scenarioResults.push({
+    scenario: scenario.id,
+    selected: null,
+    result: 'timeout',
+    points: 0,
+    time: scenarioTime
+  });
+  
+  // Calculate scores for feedback
+  const scores = gameState.countries.map(country => ({
+    country: country,
+    score: calculateSimilarity(scenario.needs, country.traits)
+  }));
+  scores.sort((a, b) => b.score - a.score);
+  
+  // Show timeout feedback
+  showTimeoutFeedback(scores, scenario);
 }
 
 function stopTimer() {
@@ -426,6 +590,44 @@ function addGlossaryLinks(text) {
   return linkedText;
 }
 
+function showTimeoutFeedback(scores, scenario) {
+  const modal = document.getElementById('feedback-modal');
+  const resultIcon = document.getElementById('result-icon');
+  const resultTitle = document.getElementById('result-title');
+  const resultPoints = document.getElementById('result-points');
+  const bestCountries = document.getElementById('best-countries');
+  const explanationText = document.getElementById('explanation-text');
+  const missedInfo = document.getElementById('missed-info');
+  
+  resultIcon.textContent = '⏰';
+  resultTitle.textContent = 'Time\'s Up!';
+  resultTitle.style.color = 'var(--error)';
+  
+  resultPoints.innerHTML = `
+    <div>+0 points</div>
+    <div style="font-size: 14px; color: var(--text-secondary);">Out of time</div>
+  `;
+  
+  const topScores = scores.slice(0, 3).filter(s => s.score === scores[0].score);
+  bestCountries.innerHTML = topScores.map(s => `
+    <div class="best-country-tag">
+      <span>${countryFlags[s.country.code] || '🏁'}</span>
+      <span>${s.country.name}</span>
+    </div>
+  `).join('');
+  
+  explanationText.innerHTML = addGlossaryLinks(scenario.explain);
+  
+  missedInfo.innerHTML = `
+    <h5 style="margin-bottom: 8px;">Take your time:</h5>
+    <p>In Expert mode, you have ${gameState.difficultySettings[gameState.difficulty].timeLimit} seconds per scenario. Speed up your decision making!</p>
+  `;
+  missedInfo.style.display = 'block';
+  
+  setupGlossaryTooltips();
+  showModal('feedback-modal');
+}
+
 function nextScenario() {
   closeModal('feedback-modal');
   
@@ -438,8 +640,59 @@ function nextScenario() {
 }
 
 function endGame() {
+  // Calculate final game stats
+  const accuracy = Math.round((gameState.correctAnswers / gameState.scenarios.length) * 100);
+  const avgTime = Math.round(gameState.totalTime / gameState.scenarios.length);
+  
+  const currentGame = {
+    accuracy: accuracy,
+    avgTime: avgTime,
+    score: gameState.score,
+    streak: gameState.maxStreak,
+    difficulty: gameState.difficulty
+  };
+  
+  // Update all-time stats
+  gameState.allTimeStats.gamesPlayed++;
+  gameState.allTimeStats.totalScore += gameState.score;
+  gameState.allTimeStats.totalTime += gameState.totalTime;
+  gameState.allTimeStats.bestStreak = Math.max(gameState.allTimeStats.bestStreak, gameState.maxStreak);
+  gameState.allTimeStats.difficultyCompletions[gameState.difficulty]++;
+  
+  if (accuracy === 100) {
+    gameState.allTimeStats.perfectGames++;
+  }
+  
+  // Check for new achievements
+  const newAchievements = [];
+  ACHIEVEMENTS.forEach(achievement => {
+    if (!gameState.allTimeStats.achievements.includes(achievement.id)) {
+      if (achievement.check(gameState.allTimeStats, currentGame)) {
+        gameState.allTimeStats.achievements.push(achievement.id);
+        newAchievements.push(achievement);
+      }
+    }
+  });
+  
+  // Store new achievements for display
+  gameState.achievements = newAchievements;
+  
+  // Save to localStorage
+  localStorage.setItem('euTaxTacticianStats', JSON.stringify(gameState.allTimeStats));
+  
   showScreen('results');
   displayResults();
+  
+  // Show achievement notifications
+  if (newAchievements.length > 0) {
+    setTimeout(() => {
+      newAchievements.forEach((achievement, index) => {
+        setTimeout(() => {
+          showAchievementNotification(achievement);
+        }, index * 500);
+      });
+    }, 1000);
+  }
 }
 
 function displayResults() {
@@ -498,11 +751,42 @@ function displayResults() {
   }).join('');
   
   masteryContainer.innerHTML = masteryItems || '<p style="color: var(--text-secondary);">Complete more scenarios to see concept mastery.</p>';
+  
+  // Display all-time statistics
+  document.getElementById('stat-games-played').textContent = gameState.allTimeStats.gamesPlayed;
+  document.getElementById('stat-total-score').textContent = gameState.allTimeStats.totalScore.toLocaleString();
+  document.getElementById('stat-perfect-games').textContent = gameState.allTimeStats.perfectGames;
+  document.getElementById('stat-best-streak').textContent = gameState.allTimeStats.bestStreak;
+  
+  // Difficulty completions
+  document.getElementById('stat-easy-count').textContent = gameState.allTimeStats.difficultyCompletions.easy;
+  document.getElementById('stat-normal-count').textContent = gameState.allTimeStats.difficultyCompletions.normal;
+  document.getElementById('stat-hard-count').textContent = gameState.allTimeStats.difficultyCompletions.hard;
+  
+  // Achievements display
+  const achievementsContainer = document.getElementById('all-achievements');
+  const earnedCount = gameState.allTimeStats.achievements.length;
+  const totalCount = ACHIEVEMENTS.length;
+  
+  // Update achievement count in title
+  document.querySelector('.achievements-display h4').textContent = `Achievements (${earnedCount}/${totalCount})`;
+  
+  achievementsContainer.innerHTML = ACHIEVEMENTS.map(achievement => {
+    const isUnlocked = gameState.allTimeStats.achievements.includes(achievement.id);
+    const isNew = gameState.achievements.some(a => a.id === achievement.id);
+    
+    return `
+      <div class="achievement-badge ${isUnlocked ? 'unlocked' : 'locked'}" title="${achievement.description}">
+        <div class="achievement-icon">${achievement.icon}</div>
+        <div class="achievement-name">${achievement.name}${isNew ? ' 🆕' : ''}</div>
+        <div class="achievement-desc">${achievement.description}</div>
+      </div>
+    `;
+  }).join('');
 }
 
 function restartGame() {
-  // Shuffle scenarios again for replay
-  gameState.scenarios = shuffleArray([...gameState.scenarios]);
+  // Restart with same difficulty settings
   startGame();
 }
 
@@ -552,6 +836,41 @@ function showAbilityUnlock(name, icon) {
   
   setTimeout(() => {
     document.body.removeChild(notification);
+  }, 3000);
+}
+
+function showAchievementNotification(achievement) {
+  const notification = document.createElement('div');
+  notification.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 32px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      z-index: 2000;
+      animation: fadeIn 0.5s ease;
+      text-align: center;
+      min-width: 300px;
+    ">
+      <div style="font-size: 4rem; margin-bottom: 16px;">${achievement.icon}</div>
+      <h3 style="font-size: 20px; margin-bottom: 8px;">Achievement Unlocked!</h3>
+      <div style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">${achievement.name}</div>
+      <div style="opacity: 0.9; font-size: 14px;">${achievement.description}</div>
+    </div>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.firstElementChild.style.animation = 'fadeOut 0.5s ease';
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 500);
   }, 3000);
 }
 

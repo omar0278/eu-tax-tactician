@@ -23,6 +23,25 @@
                 <div class="hero-section">
                     <h1>🇪🇺 EU Tax Tactician</h1>
                     <p>Master EU business taxation through interactive scenarios</p>
+                    
+                    <div class="difficulty-selector">
+                        <h3>Choose Difficulty</h3>
+                        <div class="difficulty-options">
+                            <button class="difficulty-btn active" data-difficulty="easy">
+                                <div class="difficulty-name">📘 Beginner</div>
+                                <div class="difficulty-desc">6 scenarios, relaxed pace</div>
+                            </button>
+                            <button class="difficulty-btn" data-difficulty="normal">
+                                <div class="difficulty-name">📗 Intermediate</div>
+                                <div class="difficulty-desc">12 scenarios, standard pace</div>
+                            </button>
+                            <button class="difficulty-btn" data-difficulty="hard">
+                                <div class="difficulty-name">📕 Expert</div>
+                                <div class="difficulty-desc">18 scenarios, time pressure</div>
+                            </button>
+                        </div>
+                    </div>
+                    
                     <button id="start-game-btn" class="btn btn-primary btn-large">Start Game</button>
                 </div>
                 
@@ -157,6 +176,49 @@
                 <div class="concept-mastery">
                     <h3>Concept Mastery</h3>
                     <div id="mastery-heatmap" class="mastery-heatmap"></div>
+                </div>
+                
+                <div class="stats-dashboard">
+                    <h3>All-Time Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-item-label">Games Played</div>
+                            <div id="stat-games-played" class="stat-item-value">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-item-label">Total Score</div>
+                            <div id="stat-total-score" class="stat-item-value">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-item-label">Perfect Games</div>
+                            <div id="stat-perfect-games" class="stat-item-value">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-item-label">Best Streak</div>
+                            <div id="stat-best-streak" class="stat-item-value">0</div>
+                        </div>
+                    </div>
+                    <div class="difficulty-completions">
+                        <h4>Difficulty Completions</h4>
+                        <div class="completion-bars">
+                            <div class="completion-item">
+                                <span>📘 Beginner</span>
+                                <span id="stat-easy-count">0</span>
+                            </div>
+                            <div class="completion-item">
+                                <span>📗 Intermediate</span>
+                                <span id="stat-normal-count">0</span>
+                            </div>
+                            <div class="completion-item">
+                                <span>📕 Expert</span>
+                                <span id="stat-hard-count">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="achievements-display">
+                        <h4>Achievements ({{earned}}/{{total}})</h4>
+                        <div id="all-achievements" class="achievements-grid"></div>
+                    </div>
                 </div>
                 
                 <div class="actions">
